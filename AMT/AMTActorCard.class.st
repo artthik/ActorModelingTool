@@ -130,14 +130,14 @@ AMTActorCard >> initialize [
 	nameElement := self nameElement.
 	attributesElement := self attributesElement.
 	methodElement := self methodElement.
-	"self
+	self
 		addChild: buttons;
 		addChild: nameElement;
 		addChild: commentElement;
 		addChild: saveNameButton;
 		addChild: attributesElement;
 		addChild: methodElement.
-	self minimizeActorCard"
+	self minimizeActorCard
 ]
 
 { #category : #accessing }
@@ -301,10 +301,10 @@ AMTActorCard >> setActor: anActor [
 	nameElement text: actor class name asRopedText.
 	attributes := actor class allInstVarNames.
 	attributesElement items: actor class allInstVarNames.
-	methodElement items: actor class methods asOrderedCollection.
+	methodElement items: actor class methods asOrderedCollection	"
 	self
 		removeChildren;
-		addChild: ((actor gtViewsFor: GtPhlowView empty) asElementDo: #yourself)
+		addChild: ((actor gtViewsFor: GtPhlowView empty) asElementDo: #yourself)"
 ]
 
 { #category : #accessing }
