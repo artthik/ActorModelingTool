@@ -1,8 +1,5 @@
-"
-What is the Actor supposed to do?
-"
 Class {
-	#name : #AMTActorBlueprint,
+	#name : #VostraChecker2,
 	#superclass : #Object,
 	#instVars : [
 		'mailbox',
@@ -15,28 +12,28 @@ Class {
 }
 
 { #category : #accessing }
-AMTActorBlueprint >> actorCard [
+VostraChecker2 >> actorCard [
 	^ actorCard
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> actorCard: anObject [
+VostraChecker2 >> actorCard: anObject [
 	actorCard := anObject
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> addToMailbox: message [
+VostraChecker2 >> addToMailbox: message [
 	mailbox add: message.
 	self actorCard changeColor.
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> createAndSend [
+VostraChecker2 >> createAndSend [
 	^ self
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
+VostraChecker2 >> createAndSendMessageTo: recipient with: data and: type [
 	| message |
 	message := AMTMessageBlueprint new.
 	message sender: self.
@@ -47,7 +44,7 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 ]
 
 { #category : #'as yet unclassified' }
-AMTActorBlueprint >> gtMethodsFor: aView [
+VostraChecker2 >> gtMethodsFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Methods' translated;
@@ -65,7 +62,7 @@ AMTActorBlueprint >> gtMethodsFor: aView [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> hasActor: anActor [
+VostraChecker2 >> hasActor: anActor [
 	| occurrences |
 	occurrences := knownActors occurrencesOf: anActor.
 	occurrences > 0
@@ -74,7 +71,7 @@ AMTActorBlueprint >> hasActor: anActor [
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> initialize [
+VostraChecker2 >> initialize [
 	mailbox := OrderedCollection new.
 	address := UUIDGenerator new nextRandom16.
 	state := 0.
@@ -82,17 +79,17 @@ AMTActorBlueprint >> initialize [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors [
+VostraChecker2 >> knownActors [
 	^ knownActors
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors: anObject [
+VostraChecker2 >> knownActors: anObject [
 	knownActors := anObject
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> processsMessage [
+VostraChecker2 >> processsMessage [
 	| message |
 	message := mailbox at: 1.
 	message type = 'Test'
@@ -100,17 +97,50 @@ AMTActorBlueprint >> processsMessage [
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> receive [
-	self actorCard changeColorBack.
-	^ self
+VostraChecker2 >> receive [
+	| message vostraChecker3 vostraEnd |
+	knownActors
+		do: [ :actor | 
+			actor class = VostraChecker3
+				ifTrue: [ vostraChecker3 := actor ] ].
+	knownActors
+		do: [ :actor | 
+			actor class = VostraEnd
+				ifTrue: [ vostraEnd := actor ] ].
+	message := mailbox at: 1.
+	mailbox remove: message.
+	message type = 'Check2'
+		ifTrue: [ (message data at: 4) = 'yes'
+				ifTrue: [ message data at: 7 put: 'indefinitely'.
+					self
+						createAndSendMessageTo: vostraEnd
+						with: message data
+						and: 'End'.
+					self actorCard changeColorBack.
+					^ self ].
+			(message data at: 5) = 'life sentance'
+				ifTrue: [ message data at: 7 put: 'indefinitely'.
+					self
+						createAndSendMessageTo: vostraChecker3
+						with: message data
+						and: 'End'.
+					self actorCard changeColorBack.
+					^ self ].
+			((message data at: 4) ~= 'yes'
+				or: [ (message data at: 5) ~= 'life sentance' ])
+				ifTrue: [ self
+						createAndSendMessageTo: vostraChecker3
+						with: message data
+						and: 'Check3' ] ].
+	self actorCard changeColorBack
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> setUp [
+VostraChecker2 >> setUp [
 	^ self
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> state [
+VostraChecker2 >> state [
 	^ state
 ]

@@ -1,8 +1,5 @@
-"
-What is the Actor supposed to do?
-"
 Class {
-	#name : #AMTActorBlueprint,
+	#name : #VostraEnd,
 	#superclass : #Object,
 	#instVars : [
 		'mailbox',
@@ -15,28 +12,28 @@ Class {
 }
 
 { #category : #accessing }
-AMTActorBlueprint >> actorCard [
+VostraEnd >> actorCard [
 	^ actorCard
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> actorCard: anObject [
+VostraEnd >> actorCard: anObject [
 	actorCard := anObject
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> addToMailbox: message [
+VostraEnd >> addToMailbox: message [
 	mailbox add: message.
 	self actorCard changeColor.
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> createAndSend [
+VostraEnd >> createAndSend [
 	^ self
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
+VostraEnd >> createAndSendMessageTo: recipient with: data and: type [
 	| message |
 	message := AMTMessageBlueprint new.
 	message sender: self.
@@ -47,7 +44,7 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 ]
 
 { #category : #'as yet unclassified' }
-AMTActorBlueprint >> gtMethodsFor: aView [
+VostraEnd >> gtMethodsFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Methods' translated;
@@ -65,7 +62,7 @@ AMTActorBlueprint >> gtMethodsFor: aView [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> hasActor: anActor [
+VostraEnd >> hasActor: anActor [
 	| occurrences |
 	occurrences := knownActors occurrencesOf: anActor.
 	occurrences > 0
@@ -74,7 +71,7 @@ AMTActorBlueprint >> hasActor: anActor [
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> initialize [
+VostraEnd >> initialize [
 	mailbox := OrderedCollection new.
 	address := UUIDGenerator new nextRandom16.
 	state := 0.
@@ -82,17 +79,17 @@ AMTActorBlueprint >> initialize [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors [
+VostraEnd >> knownActors [
 	^ knownActors
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors: anObject [
+VostraEnd >> knownActors: anObject [
 	knownActors := anObject
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> processsMessage [
+VostraEnd >> processsMessage [
 	| message |
 	message := mailbox at: 1.
 	message type = 'Test'
@@ -100,17 +97,21 @@ AMTActorBlueprint >> processsMessage [
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> receive [
-	self actorCard changeColorBack.
-	^ self
+VostraEnd >> receive [
+	| message |
+	message := mailbox at: 1.
+	mailbox remove: message.
+	message type = 'End'
+		ifTrue: [ self inform: 'Criminal record of ',(message data at: 1),' needs to be stored for ',(message data at: 7),' years' ].
+	self actorCard changeColorBack
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> setUp [
+VostraEnd >> setUp [
 	^ self
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> state [
+VostraEnd >> state [
 	^ state
 ]

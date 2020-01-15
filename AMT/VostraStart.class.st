@@ -1,8 +1,5 @@
-"
-What is the Actor supposed to do?
-"
 Class {
-	#name : #AMTActorBlueprint,
+	#name : #VostraStart,
 	#superclass : #Object,
 	#instVars : [
 		'mailbox',
@@ -15,28 +12,42 @@ Class {
 }
 
 { #category : #accessing }
-AMTActorBlueprint >> actorCard [
+VostraStart >> actorCard [
 	^ actorCard
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> actorCard: anObject [
+VostraStart >> actorCard: anObject [
 	actorCard := anObject
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> addToMailbox: message [
+VostraStart >> addToMailbox: message [
 	mailbox add: message.
 	self actorCard changeColor.
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> createAndSend [
-	^ self
+VostraStart >> createAndSend [
+	| vostraChecker1 data |
+	state := state - 200.
+	knownActors
+		do: [ :actor | 
+			actor class = VostraChecker1
+				ifTrue: [ vostraChecker1 := actor ] ].
+	data := OrderedCollection new.
+	data add: 'Sherlock Holmes, 221b Baker street, London, January 6th 1854'.
+	data add: '1'.
+	data add: '20'.
+	data add: 'no'.
+	data add: 'prison'.
+	data add: 'no'.
+	data add: '0'.
+	self createAndSendMessageTo: vostraChecker1 with: data and: 'Check1'
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
+VostraStart >> createAndSendMessageTo: recipient with: data and: type [
 	| message |
 	message := AMTMessageBlueprint new.
 	message sender: self.
@@ -47,7 +58,7 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 ]
 
 { #category : #'as yet unclassified' }
-AMTActorBlueprint >> gtMethodsFor: aView [
+VostraStart >> gtMethodsFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Methods' translated;
@@ -65,7 +76,7 @@ AMTActorBlueprint >> gtMethodsFor: aView [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> hasActor: anActor [
+VostraStart >> hasActor: anActor [
 	| occurrences |
 	occurrences := knownActors occurrencesOf: anActor.
 	occurrences > 0
@@ -74,7 +85,7 @@ AMTActorBlueprint >> hasActor: anActor [
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> initialize [
+VostraStart >> initialize [
 	mailbox := OrderedCollection new.
 	address := UUIDGenerator new nextRandom16.
 	state := 0.
@@ -82,17 +93,17 @@ AMTActorBlueprint >> initialize [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors [
+VostraStart >> knownActors [
 	^ knownActors
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors: anObject [
+VostraStart >> knownActors: anObject [
 	knownActors := anObject
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> processsMessage [
+VostraStart >> processsMessage [
 	| message |
 	message := mailbox at: 1.
 	message type = 'Test'
@@ -100,17 +111,17 @@ AMTActorBlueprint >> processsMessage [
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> receive [
+VostraStart >> receive [
 	self actorCard changeColorBack.
 	^ self
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> setUp [
+VostraStart >> setUp [
 	^ self
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> state [
+VostraStart >> state [
 	^ state
 ]

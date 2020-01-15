@@ -9,9 +9,12 @@ Class {
 		'nameLabel',
 		'tabGroup',
 		'actor',
-		'comment',
 		'commentEditor',
-		'saveCommentButton'
+		'saveCommentButton',
+		'saveNameButton',
+		'commentLabel',
+		'attributesLabel',
+		'attributesElement'
 	],
 	#category : #'AMT-View'
 }
@@ -25,7 +28,36 @@ AMTActorElement >> actor [
 AMTActorElement >> actor: anObject [
 	actor := anObject.
 	nameLabel text: actor class name asRopedText.
-	commentEditor text: actor class comment asRopedText
+	commentEditor text: actor class comment asRopedText.
+	attributesElement items: actor class allInstVarNames.
+]
+
+{ #category : #accessing }
+AMTActorElement >> attributesElement [
+	^ BrSimpleList new
+		padding: (BlInsets all: 5);
+		hMatchParent;
+		vMatchParent;
+		items: {};
+		stencil:
+			[ :n | 
+			BrButton new
+				look: BrGlamorousButtonWithLabelLook;
+				label: n;
+				action: [ :b | b phlow spawnObject: (actor instVarNamed: n) ];
+				yourself ] yourself
+]
+
+{ #category : #accessing }
+AMTActorElement >> attributesLabel [
+	^ BrLabel new
+		look: BrLabelLook;
+		padding: (BlInsets all: 5);
+		background: BrGlamorousColors defaultHeaderBackgroundColor;
+		hMatchParent;
+		vFitContent;
+		text: 'Instance variables' asRopedText;
+		yourself
 ]
 
 { #category : #initialization }
@@ -39,28 +71,21 @@ AMTActorElement >> commentEditor [
 		yourself
 ]
 
-{ #category : #initialization }
-AMTActorElement >> commentTab [
-	| canvas |
-	commentEditor := self commentEditor.
-	saveCommentButton := self saveCommentButton.
-	canvas := BlElement new
-		layout: BlLinearLayout vertical;
-		background: Color white;
-		constraintsDo: [ :c | 
-			c horizontal matchParent.
-			c vertical matchParent ];
-		look: BrShadowLook;
-		addChild: commentEditor;
-		addChild: saveCommentButton.
-	^ BrTab new
-		look: BrGlamorousTabLook new;
-		label: 'Description';
-		stencil: [ canvas ]
+{ #category : #accessing }
+AMTActorElement >> commentLabel [
+	^ BrLabel new
+		look: BrLabelLook;
+		padding: (BlInsets all: 5);
+		background: BrGlamorousColors defaultHeaderBackgroundColor;
+		hMatchParent;
+		vFitContent;
+		text: 'Description' asRopedText;
+		yourself
 ]
 
 { #category : #initialization }
 AMTActorElement >> initialize [
+	| aCloseButton |
 	super initialize.
 	self layout: BlLinearLayout vertical.
 	self background: Color white.
@@ -70,19 +95,66 @@ AMTActorElement >> initialize [
 			c horizontal exact: 400.
 			c vertical exact: 400 ].
 	nameLabel := self nameLabel.
+	saveNameButton := self saveNameButton.
 	tabGroup := self tabGroup.
+	aCloseButton := GtInspectorRoundButtonStencil new asElement
+		icon: GtInspectorPlusIconStencil close asElement;
+		constraintsDo: [ :c | 
+			c ignoreByLayout.
+			c
+				margin:
+					(BlInsets
+						top: -10
+						left: 0
+						bottom: 0
+						right: -10).
+			c ignored horizontal alignRight.
+			c ignored vertical alignTop ];
+		action: [ self inform: 'yaes' ].
 	self
+		addChild: aCloseButton;
 		addChild: nameLabel;
+		addChild: saveNameButton;
 		addChild: tabGroup.
 	^ self
 ]
 
+{ #category : #initialization }
+AMTActorElement >> mainTab [
+	| canvas |
+	commentLabel := self commentLabel.
+	commentEditor := self commentEditor.
+	saveCommentButton := self saveCommentButton.
+	attributesLabel := self attributesLabel.
+	attributesElement := self attributesElement.
+	canvas := BlElement new
+		layout: BlLinearLayout vertical;
+		background: Color white;
+		constraintsDo: [ :c | 
+			c horizontal matchParent.
+			c vertical matchParent ];
+		look: BrShadowLook;
+		addChild: commentLabel;
+		addChild: commentEditor;
+		addChild: saveCommentButton;
+		addChild: attributesLabel;
+		addChild: attributesElement.
+	^ BrTab new
+		look: BrGlamorousTabLook new;
+		label: 'Description';
+		stencil: [ canvas ]
+]
+
 { #category : #accessing }
 AMTActorElement >> nameLabel [
-	^ BrLabel new
-		look: BrLabelLook;
-		text: '...';
-		margin: (BlInsets all: 10)
+	^ BrEditor new
+		look: BrEditorLook;
+		padding: (BlInsets all: 5);
+		background: BrGlamorousColors defaultHeaderBackgroundColor;
+		hMatchParent;
+		vExact: 40;
+		text: '...' asRopedText;
+		yourself
 ]
 
 { #category : #initialization }
@@ -102,9 +174,22 @@ AMTActorElement >> saveCommentButton [
 	^ BrButton new
 		beLarge;
 		look: BrGlamorousButtonWithIconLook new;
-		icon: BrGlamorousIcons accept asElement;
+		icon: BrGlamorousIcons edit asElement;
 		label: 'Save Description';
 		action: [ actor class comment: commentEditor text asString ];
+		constraintsDo: [ :c | c horizontal matchParent ];
+		margin: (BlInsets all: 5);
+		yourself
+]
+
+{ #category : #accessing }
+AMTActorElement >> saveNameButton [
+	^ BrButton new
+		beLarge;
+		look: BrGlamorousButtonWithIconLook new;
+		icon: BrGlamorousIcons edit asElement;
+		label: 'Save Name';
+		action: [ actor class rename: nameLabel text asString ];
 		constraintsDo: [ :c | c horizontal matchParent ];
 		margin: (BlInsets all: 5);
 		yourself
@@ -140,7 +225,7 @@ AMTActorElement >> stateTab [
 AMTActorElement >> tabGroup [
 	^ BrTabGroup new
 		look: BrGlamorousTabGroupLook new;
-		addTab: self commentTab;
+		addTab: self mainTab;
 		addTab: self stateTab;
 		addTab: self sendTab;
 		addTab: self receiveTab
