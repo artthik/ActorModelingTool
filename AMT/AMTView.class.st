@@ -36,7 +36,7 @@ AMTView >> addActorButton [
 { #category : #initialization }
 AMTView >> addActorCard: anActor [
 	| actorCard |
-	actorCard := AMTActorCard new
+	actorCard := AMTActorCard  new
 		view: self;
 		setActor: anActor;
 		addEventHandler: BlPullHandler new.

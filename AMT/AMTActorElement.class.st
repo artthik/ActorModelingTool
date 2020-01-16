@@ -14,7 +14,13 @@ Class {
 		'saveNameButton',
 		'commentLabel',
 		'attributesLabel',
-		'attributesElement'
+		'attributesElement',
+		'refreshButton',
+		'buttons',
+		'view',
+		'addActorButton',
+		'receiveMethodsList',
+		'sendMethodsList'
 	],
 	#category : #'AMT-View'
 }
@@ -30,6 +36,21 @@ AMTActorElement >> actor: anObject [
 	nameLabel text: actor class name asRopedText.
 	commentEditor text: actor class comment asRopedText.
 	attributesElement items: actor class allInstVarNames.
+	receiveMethodsList items: actor class methods asOrderedCollection.
+	sendMethodsList items: actor class methods asOrderedCollection 
+]
+
+{ #category : #accessing }
+AMTActorElement >> addActorButton [
+	^ BrButton new
+		beLarge;
+		look: BrGlamorousButtonWithIconLook new;
+		icon: BrGlamorousIcons add asElement;
+		label: 'Add Actor';
+		action: [ view addActor ];
+		constraintsDo: [ :c | c horizontal matchParent ];
+		margin: (BlInsets top: 5 right: 5);
+		yourself
 ]
 
 { #category : #accessing }
@@ -85,7 +106,6 @@ AMTActorElement >> commentLabel [
 
 { #category : #initialization }
 AMTActorElement >> initialize [
-	| aCloseButton |
 	super initialize.
 	self layout: BlLinearLayout vertical.
 	self background: Color white.
@@ -96,25 +116,22 @@ AMTActorElement >> initialize [
 			c vertical exact: 400 ].
 	nameLabel := self nameLabel.
 	saveNameButton := self saveNameButton.
+	refreshButton := self refreshButton.
+	addActorButton := self addActorButton .
 	tabGroup := self tabGroup.
-	aCloseButton := GtInspectorRoundButtonStencil new asElement
-		icon: GtInspectorPlusIconStencil close asElement;
+	buttons := BlElement new.
+	buttons layout: BlLinearLayout horizontal.
+	buttons
 		constraintsDo: [ :c | 
-			c ignoreByLayout.
-			c
-				margin:
-					(BlInsets
-						top: -10
-						left: 0
-						bottom: 0
-						right: -10).
-			c ignored horizontal alignRight.
-			c ignored vertical alignTop ];
-		action: [ self inform: 'yaes' ].
-	self
-		addChild: aCloseButton;
-		addChild: nameLabel;
+			c horizontal matchParent.
+			c vertical exact: 40 ].
+	buttons
 		addChild: saveNameButton;
+		addChild: refreshButton;
+		addChild: addActorButton.
+	self
+		addChild: nameLabel;
+		addChild: buttons;
 		addChild: tabGroup.
 	^ self
 ]
@@ -141,7 +158,7 @@ AMTActorElement >> mainTab [
 		addChild: attributesElement.
 	^ BrTab new
 		look: BrGlamorousTabLook new;
-		label: 'Description';
+		label: 'Main';
 		stencil: [ canvas ]
 ]
 
@@ -158,15 +175,44 @@ AMTActorElement >> nameLabel [
 ]
 
 { #category : #initialization }
+AMTActorElement >> receiveMethodsList [
+	^ BrSimpleList new
+		padding: (BlInsets all: 5);
+		hMatchParent;
+		vMatchParent;
+		items: {};
+		stencil:
+			[ :m | 
+			(AMTMethodCoder forMethod: m)
+				object: actor;
+				yourself ] yourself
+]
+
+{ #category : #initialization }
 AMTActorElement >> receiveTab [
+	receiveMethodsList := self receiveMethodsList.
 	^ BrTab new
 		look: BrGlamorousTabLook new;
 		label: 'Receive';
-		stencil: [ BlElement new
-				constraintsDo: [ :c | 
-					c horizontal matchParent.
-					c vertical matchParent ];
-				background: (Color red alpha: 0.2) ]
+		stencil: [ receiveMethodsList ]
+]
+
+{ #category : #accessing }
+AMTActorElement >> refresh [
+	self actor: actor
+]
+
+{ #category : #accessing }
+AMTActorElement >> refreshButton [
+	^ BrButton new
+		beLarge;
+		look: BrGlamorousButtonWithIconLook new;
+		icon: BrGlamorousIcons refresh asElement;
+		label: 'Refresh Actor';
+		action: [ self refresh ];
+		constraintsDo: [ :c | c horizontal matchParent ];
+		margin: (BlInsets top: 5 right:  5);
+		yourself
 ]
 
 { #category : #accessing }
@@ -196,16 +242,26 @@ AMTActorElement >> saveNameButton [
 ]
 
 { #category : #initialization }
+AMTActorElement >> sendMethodsList [
+	^ BrSimpleList new
+		padding: (BlInsets all: 5);
+		hMatchParent;
+		vMatchParent;
+		items: {};
+		stencil:
+			[ :m | 
+			(AMTMethodCoder forMethod: m)
+				object: actor;
+				yourself ] yourself
+]
+
+{ #category : #initialization }
 AMTActorElement >> sendTab [
+	sendMethodsList := self sendMethodsList.
 	^ BrTab new
 		look: BrGlamorousTabLook new;
 		label: 'Send';
-		stencil: [ BlElement new
-				constraintsDo: [ :c | 
-					c horizontal matchParent.
-					c vertical matchParent ];
-				margin: (BlInsets all: 10);
-				background: (Color red alpha: 0.2) ]
+		stencil: [ sendMethodsList ]
 ]
 
 { #category : #initialization }
@@ -226,7 +282,7 @@ AMTActorElement >> tabGroup [
 	^ BrTabGroup new
 		look: BrGlamorousTabGroupLook new;
 		addTab: self mainTab;
-		addTab: self stateTab;
 		addTab: self sendTab;
-		addTab: self receiveTab
+		addTab: self receiveTab;
+		addTab: self stateTab
 ]
