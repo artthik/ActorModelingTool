@@ -97,11 +97,11 @@ AMTExampleATMWithdrawal >> completeScenario [
 	"Add the ATM method to create and send a message to the bank"
 	atmActor class
 		compile:
-			'createAndSend | bank | state := state - 200. knownActors do: [ :actor | actor class = Bank ifTrue: [ bank := actor ] ]. self createAndSendMessageTo: bank with: ''200'' and: ''Withdrawal'''.
+			'createAndSend <AMTSend> | bank | state := state - 200. knownActors do: [ :actor | actor class = Bank ifTrue: [ bank := actor ] ]. self createAndSendMessageTo: bank with: ''200'' and: ''Withdrawal'''.
 	"Add the Bank method to receive and process the message from the ATM"
 	bankActor class
 		compile:
-			'receive	| message | message := mailbox at: 1. message type = ''Withdrawal'' ifTrue: [ state := state - message data asNumber]. self actorCard changeColorBack'.
+			'receive <AMTReceive>	| message | message := mailbox at: 1. message type = ''Withdrawal'' ifTrue: [ state := state - message data asNumber]. self actorCard changeColorBack'.
 	"Refresh the actors so the view shows the changes"
 	container := view container.
 	actorCards := container children.

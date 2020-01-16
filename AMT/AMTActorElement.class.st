@@ -20,7 +20,8 @@ Class {
 		'view',
 		'addActorButton',
 		'receiveMethodsList',
-		'sendMethodsList'
+		'sendMethodsList',
+		'allMethodsList'
 	],
 	#category : #'AMT-View'
 }
@@ -32,12 +33,19 @@ AMTActorElement >> actor [
 
 { #category : #accessing }
 AMTActorElement >> actor: anObject [
+	| methods receiveMethods sendMethods |
 	actor := anObject.
 	nameLabel text: actor class name asRopedText.
 	commentEditor text: actor class comment asRopedText.
 	attributesElement items: actor class allInstVarNames.
-	receiveMethodsList items: actor class methods asOrderedCollection.
-	sendMethodsList items: actor class methods asOrderedCollection 
+	methods := actor class methods.
+	receiveMethods := methods
+		select: [ :method | method hasPragmaNamed: 'AMTReceive' ].
+	receiveMethodsList items: receiveMethods asOrderedCollection.
+	sendMethods := methods
+		select: [ :method | method hasPragmaNamed: 'AMTSend' ].
+	sendMethodsList items: sendMethods asOrderedCollection.
+	allMethodsList items: methods asOrderedCollection
 ]
 
 { #category : #accessing }
@@ -51,6 +59,29 @@ AMTActorElement >> addActorButton [
 		constraintsDo: [ :c | c horizontal matchParent ];
 		margin: (BlInsets top: 5 right: 5);
 		yourself
+]
+
+{ #category : #initialization }
+AMTActorElement >> allMethodsList [
+	^ BrSimpleList new
+		padding: (BlInsets all: 5);
+		hMatchParent;
+		vMatchParent;
+		items: {};
+		stencil:
+			[ :m | 
+			(AMTMethodCoder forMethod: m)
+				object: actor;
+				yourself ] yourself
+]
+
+{ #category : #initialization }
+AMTActorElement >> allMethodsTab [
+	allMethodsList := self allMethodsList.
+	^ BrTab new
+		look: BrGlamorousTabLook new;
+		label: 'All methods';
+		stencil: [ allMethodsList ]
 ]
 
 { #category : #accessing }
@@ -79,6 +110,19 @@ AMTActorElement >> attributesLabel [
 		vFitContent;
 		text: 'Instance variables' asRopedText;
 		yourself
+]
+
+{ #category : #initialization }
+AMTActorElement >> behaviourTab [
+	^ BrTab new
+		look: BrGlamorousTabLook new;
+		label: 'Behaviour';
+		stencil: [ AMTActorCard new
+				setActor: actor;
+				constraintsDo: [ :c | 
+					c horizontal matchParent.
+					c vertical matchParent ];
+				margin: (BlInsets all: 10) ]
 ]
 
 { #category : #initialization }
@@ -264,25 +308,18 @@ AMTActorElement >> sendTab [
 		stencil: [ sendMethodsList ]
 ]
 
-{ #category : #initialization }
-AMTActorElement >> stateTab [
-	^ BrTab new
-		look: BrGlamorousTabLook new;
-		label: 'State';
-		stencil: [ AMTActorCard new
-				setActor: actor;
-				constraintsDo: [ :c | 
-					c horizontal matchParent.
-					c vertical matchParent ];
-				margin: (BlInsets all: 10) ]
-]
-
 { #category : #accessing }
 AMTActorElement >> tabGroup [
 	^ BrTabGroup new
 		look: BrGlamorousTabGroupLook new;
 		addTab: self mainTab;
+		addTab: self behaviourTab;
 		addTab: self sendTab;
 		addTab: self receiveTab;
-		addTab: self stateTab
+		addTab: self allMethodsTab
+]
+
+{ #category : #accessing }
+AMTActorElement >> view: anObject [
+	view := anObject
 ]

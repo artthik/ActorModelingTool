@@ -34,11 +34,11 @@ AMTView >> addActorButton [
 ]
 
 { #category : #initialization }
-AMTView >> addActorCard: anActor [
+AMTView >> addActorElement: anActor [
 	| actorCard |
-	actorCard := AMTActorCard  new
+	actorCard := AMTActorElement new
 		view: self;
-		setActor: anActor;
+		actor: anActor;
 		addEventHandler: BlPullHandler new.
 	container addChild: actorCard.
 	actors add: anActor

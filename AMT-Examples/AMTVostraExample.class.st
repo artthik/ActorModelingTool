@@ -83,6 +83,7 @@ AMTVostraExample >> addMethodToVostraChecker1 [
 	vostraChecker1 class
 		compile:
 			'receive
+			<AMTReceive>
 	| message vostraChecker2 vostraEnd |
 	knownActors
 		do: [ :actor | 
@@ -127,6 +128,7 @@ AMTVostraExample >> addMethodToVostraChecker2 [
 	vostraChecker2 class
 		compile:
 			'receive
+			<AMTReceive>
 	| message vostraChecker3 vostraEnd |
 	knownActors
 		do: [ :actor | 
@@ -171,6 +173,7 @@ AMTVostraExample >> addMethodToVostraChecker3 [
 	vostraChecker3 class
 		compile:
 			'receive
+			<AMTReceive>
 	| message vostraEnd |
 	knownActors
 		do: [ :actor | 
@@ -206,6 +209,7 @@ AMTVostraExample >> addMethodToVostraEnd [
 	vostraEnd class
 		compile:
 			'receive
+			<AMTReceive>
 	| message |
 	message := mailbox at: 1.
 	mailbox remove: message.
@@ -221,6 +225,7 @@ AMTVostraExample >> addMethodToVostraStart [
 	vostraStart class
 		compile:
 			'createAndSend
+			<AMTSend>
 	| vostraChecker1 data |
 	state := state - 200.
 	knownActors

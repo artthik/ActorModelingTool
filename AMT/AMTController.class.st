@@ -20,7 +20,7 @@ AMTController >> addActor [
 	actor := name asClass new.
 	"TODO: move the actor class to package tag 'Solution'"
 	model addActor: actor.
-	view addActorCard: actor
+	view addActorElement: actor
 ]
 
 { #category : #initialization }
