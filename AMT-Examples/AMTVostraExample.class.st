@@ -102,7 +102,7 @@ AMTVostraExample >> addMethodToVostraChecker1 [
 						createAndSendMessageTo: vostraEnd
 						with: message data
 						and: ''End''.
-						self actorCard changeColorBack.
+						self actorElement changeHeaderColorBack.
 						^self. ].
 			(message data at: 3) asNumber > 25
 				ifTrue: [ message data at: 7 put: ''indefinitely''.
@@ -110,7 +110,7 @@ AMTVostraExample >> addMethodToVostraChecker1 [
 						createAndSendMessageTo: vostraEnd
 						with: message data
 						and: ''End''.
-						self actorCard changeColorBack.
+						self actorElement changeHeaderColorBack.
 						^self. ].
 			((message data at: 2) ~= ''2''
 				or: [ (message data at: 3) asNumber <= 25 ])
@@ -118,7 +118,7 @@ AMTVostraExample >> addMethodToVostraChecker1 [
 						createAndSendMessageTo: vostraChecker2
 						with: message data
 						and: ''Check2'' ] ].
-	self actorCard changeColorBack'
+	self actorElement changeHeaderColorBack.'
 ]
 
 { #category : #'accessing structure variables' }
@@ -147,7 +147,7 @@ AMTVostraExample >> addMethodToVostraChecker2 [
 						createAndSendMessageTo: vostraEnd
 						with: message data
 						and: ''End''.
-					self actorCard changeColorBack.
+					self actorElement changeHeaderColorBack.
 					^ self ].
 			(message data at: 5) = ''life sentance''
 				ifTrue: [ message data at: 7 put: ''indefinitely''.
@@ -155,7 +155,7 @@ AMTVostraExample >> addMethodToVostraChecker2 [
 						createAndSendMessageTo: vostraChecker3
 						with: message data
 						and: ''End''.
-					self actorCard changeColorBack.
+					self actorElement changeHeaderColorBack.
 					^ self ].
 			((message data at: 4) ~= ''yes''
 				or: [ (message data at: 5) ~= ''life sentance'' ])
@@ -163,7 +163,7 @@ AMTVostraExample >> addMethodToVostraChecker2 [
 						createAndSendMessageTo: vostraChecker3
 						with: message data
 						and: ''Check3'' ] ].
-	self actorCard changeColorBack'
+self actorElement changeHeaderColorBack.'
 ]
 
 { #category : #'accessing structure variables' }
@@ -190,7 +190,7 @@ AMTVostraExample >> addMethodToVostraChecker3 [
 						createAndSendMessageTo: vostraEnd
 						with: message data
 						and: ''End''.
-					self actorCard changeColorBack.
+					self actorElement changeHeaderColorBack.
 					^ self ].
 			((message data at: 5) ~= ''deportation''
 				or: [ (message data at: 6) ~= ''yes'' ])
@@ -199,7 +199,7 @@ AMTVostraExample >> addMethodToVostraChecker3 [
 						createAndSendMessageTo: vostraEnd
 						with: message data
 						and: ''End'' ] ].
-	self actorCard changeColorBack'
+	self actorElement changeHeaderColorBack.'
 ]
 
 { #category : #'accessing structure variables' }
@@ -215,7 +215,7 @@ AMTVostraExample >> addMethodToVostraEnd [
 	mailbox remove: message.
 	message type = ''End''
 		ifTrue: [ self inform: ''Criminal record of '',(message data at: 1),'' needs to be stored for '',(message data at: 7),'' years'' ].
-	self actorCard changeColorBack'
+self actorElement changeHeaderColorBack.'
 ]
 
 { #category : #'accessing structure variables' }

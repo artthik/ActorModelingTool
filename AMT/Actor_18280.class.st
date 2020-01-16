@@ -1,8 +1,5 @@
-"
-What is the Actor supposed to do?
-"
 Class {
-	#name : #AMTActorBlueprint,
+	#name : #'Actor_18280',
 	#superclass : #Object,
 	#instVars : [
 		'mailbox',
@@ -15,29 +12,29 @@ Class {
 }
 
 { #category : #accessing }
-AMTActorBlueprint >> actorElement [
+Actor_18280 >> actorElement [
 	^ actorElement
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> actorElement: anObject [
+Actor_18280 >> actorElement: anObject [
 	actorElement := anObject
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> addToMailbox: message [
+Actor_18280 >> addToMailbox: message [
 	mailbox add: message.
 	self actorElement changeHeaderColor
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> createAndSend [
+Actor_18280 >> createAndSend [
 	<AMTSend>
 	^ self
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
+Actor_18280 >> createAndSendMessageTo: recipient with: data and: type [
 	<AMTSend>
 	| message |
 	message := AMTMessageBlueprint new.
@@ -49,7 +46,7 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> hasActor: anActor [
+Actor_18280 >> hasActor: anActor [
 	| occurrences |
 	occurrences := knownActors occurrencesOf: anActor.
 	occurrences > 0
@@ -58,7 +55,7 @@ AMTActorBlueprint >> hasActor: anActor [
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> initialize [
+Actor_18280 >> initialize [
 	mailbox := OrderedCollection new.
 	address := UUIDGenerator new nextRandom16.
 	state := 0.
@@ -66,17 +63,17 @@ AMTActorBlueprint >> initialize [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors [
+Actor_18280 >> knownActors [
 	^ knownActors
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors: anObject [
+Actor_18280 >> knownActors: anObject [
 	knownActors := anObject
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> processsMessage [
+Actor_18280 >> processsMessage [
 	| message |
 	message := mailbox at: 1.
 	message type = 'Test'
@@ -84,19 +81,19 @@ AMTActorBlueprint >> processsMessage [
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> receive [
+Actor_18280 >> receive [
 	<AMTReceive>
 	self actorElement changeHeaderColorBack.
 	^ self
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> setUp [
+Actor_18280 >> setUp [
 	<AMTSetup>
 	^ self
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> state [
+Actor_18280 >> state [
 	^ state
 ]

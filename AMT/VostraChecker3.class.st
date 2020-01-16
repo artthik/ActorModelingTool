@@ -1,8 +1,5 @@
-"
-What is the Actor supposed to do?
-"
 Class {
-	#name : #AMTActorBlueprint,
+	#name : #VostraChecker3,
 	#superclass : #Object,
 	#instVars : [
 		'mailbox',
@@ -15,29 +12,29 @@ Class {
 }
 
 { #category : #accessing }
-AMTActorBlueprint >> actorElement [
+VostraChecker3 >> actorElement [
 	^ actorElement
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> actorElement: anObject [
+VostraChecker3 >> actorElement: anObject [
 	actorElement := anObject
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> addToMailbox: message [
+VostraChecker3 >> addToMailbox: message [
 	mailbox add: message.
 	self actorElement changeHeaderColor
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> createAndSend [
+VostraChecker3 >> createAndSend [
 	<AMTSend>
 	^ self
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
+VostraChecker3 >> createAndSendMessageTo: recipient with: data and: type [
 	<AMTSend>
 	| message |
 	message := AMTMessageBlueprint new.
@@ -49,7 +46,7 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> hasActor: anActor [
+VostraChecker3 >> hasActor: anActor [
 	| occurrences |
 	occurrences := knownActors occurrencesOf: anActor.
 	occurrences > 0
@@ -58,7 +55,7 @@ AMTActorBlueprint >> hasActor: anActor [
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> initialize [
+VostraChecker3 >> initialize [
 	mailbox := OrderedCollection new.
 	address := UUIDGenerator new nextRandom16.
 	state := 0.
@@ -66,17 +63,17 @@ AMTActorBlueprint >> initialize [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors [
+VostraChecker3 >> knownActors [
 	^ knownActors
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors: anObject [
+VostraChecker3 >> knownActors: anObject [
 	knownActors := anObject
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> processsMessage [
+VostraChecker3 >> processsMessage [
 	| message |
 	message := mailbox at: 1.
 	message type = 'Test'
@@ -84,19 +81,43 @@ AMTActorBlueprint >> processsMessage [
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> receive [
-	<AMTReceive>
+VostraChecker3 >> receive [
+			<AMTReceive>
+	| message vostraEnd |
+	knownActors
+		do: [ :actor | 
+			actor class = VostraEnd
+				ifTrue: [ vostraEnd := actor ] ].
+	message := mailbox at: 1.
+	mailbox remove: message.
+	message type = 'Check3'
+		ifTrue: [ (message data at: 5) = 'deportation'
+				ifTrue: [ message data at: 7 put: (message data at: 3) ].
+			(message data at: 6) = 'yes'
+				ifTrue: [ message data at: 7 put: 0.
+					self
+						createAndSendMessageTo: vostraEnd
+						with: message data
+						and: 'End'.
+					self actorElement changeHeaderColorBack.
+					^ self ].
+			((message data at: 5) ~= 'deportation'
+				or: [ (message data at: 6) ~= 'yes' ])
+				ifTrue: [ message data at: 7 put: (message data at: 3).
+					self
+						createAndSendMessageTo: vostraEnd
+						with: message data
+						and: 'End' ] ].
 	self actorElement changeHeaderColorBack.
-	^ self
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> setUp [
+VostraChecker3 >> setUp [
 	<AMTSetup>
 	^ self
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> state [
+VostraChecker3 >> state [
 	^ state
 ]

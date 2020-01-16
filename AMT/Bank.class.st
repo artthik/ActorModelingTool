@@ -1,8 +1,5 @@
-"
-What is the Actor supposed to do?
-"
 Class {
-	#name : #AMTActorBlueprint,
+	#name : #Bank,
 	#superclass : #Object,
 	#instVars : [
 		'mailbox',
@@ -15,29 +12,29 @@ Class {
 }
 
 { #category : #accessing }
-AMTActorBlueprint >> actorElement [
+Bank >> actorElement [
 	^ actorElement
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> actorElement: anObject [
+Bank >> actorElement: anObject [
 	actorElement := anObject
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> addToMailbox: message [
+Bank >> addToMailbox: message [
 	mailbox add: message.
 	self actorElement changeHeaderColor
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> createAndSend [
+Bank >> createAndSend [
 	<AMTSend>
 	^ self
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
+Bank >> createAndSendMessageTo: recipient with: data and: type [
 	<AMTSend>
 	| message |
 	message := AMTMessageBlueprint new.
@@ -49,7 +46,7 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> hasActor: anActor [
+Bank >> hasActor: anActor [
 	| occurrences |
 	occurrences := knownActors occurrencesOf: anActor.
 	occurrences > 0
@@ -58,7 +55,7 @@ AMTActorBlueprint >> hasActor: anActor [
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> initialize [
+Bank >> initialize [
 	mailbox := OrderedCollection new.
 	address := UUIDGenerator new nextRandom16.
 	state := 0.
@@ -66,17 +63,17 @@ AMTActorBlueprint >> initialize [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors [
+Bank >> knownActors [
 	^ knownActors
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors: anObject [
+Bank >> knownActors: anObject [
 	knownActors := anObject
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> processsMessage [
+Bank >> processsMessage [
 	| message |
 	message := mailbox at: 1.
 	message type = 'Test'
@@ -84,19 +81,20 @@ AMTActorBlueprint >> processsMessage [
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> receive [
+Bank >> receive [
 	<AMTReceive>
-	self actorElement changeHeaderColorBack.
-	^ self
+	| message |
+	message := mailbox at: 1.
+	message type = 'Withdrawal'
+		ifTrue: [ state := state - message data asNumber ].
+	self actorElement changeHeaderColorBack
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> setUp [
-	<AMTSetup>
-	^ self
+Bank >> setUp [ state := 5000.
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> state [
+Bank >> state [
 	^ state
 ]

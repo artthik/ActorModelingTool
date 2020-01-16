@@ -35,6 +35,7 @@ AMTActorElement >> actor [
 AMTActorElement >> actor: anObject [
 	| methods receiveMethods sendMethods |
 	actor := anObject.
+	anObject actorElement: self.
 	nameLabel text: actor class name asRopedText.
 	commentEditor text: actor class comment asRopedText.
 	attributesElement items: actor class allInstVarNames.
@@ -117,12 +118,18 @@ AMTActorElement >> behaviourTab [
 	^ BrTab new
 		look: BrGlamorousTabLook new;
 		label: 'Behaviour';
-		stencil: [ AMTActorCard new
-				setActor: actor;
-				constraintsDo: [ :c | 
-					c horizontal matchParent.
-					c vertical matchParent ];
-				margin: (BlInsets all: 10) ]
+		stencil: [ AMTActorCard new setActor: actor ]
+]
+
+{ #category : #accessing }
+AMTActorElement >> changeHeaderColor [
+	nameLabel background: (Color fromHexString: 'FF928B')
+	"attributesElement background: Color black."
+]
+
+{ #category : #accessing }
+AMTActorElement >> changeHeaderColorBack [
+	nameLabel background: BrGlamorousColors defaultHeaderBackgroundColor
 ]
 
 { #category : #initialization }

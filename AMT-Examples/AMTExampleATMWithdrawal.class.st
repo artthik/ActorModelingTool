@@ -101,7 +101,7 @@ AMTExampleATMWithdrawal >> completeScenario [
 	"Add the Bank method to receive and process the message from the ATM"
 	bankActor class
 		compile:
-			'receive <AMTReceive>	| message | message := mailbox at: 1. message type = ''Withdrawal'' ifTrue: [ state := state - message data asNumber]. self actorCard changeColorBack'.
+			'receive <AMTReceive>	| message | message := mailbox at: 1. message type = ''Withdrawal'' ifTrue: [ state := state - message data asNumber]. self actorElement changeHeaderColorBack.'.
 	"Refresh the actors so the view shows the changes"
 	container := view container.
 	actorCards := container children.

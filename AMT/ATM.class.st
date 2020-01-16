@@ -1,8 +1,5 @@
-"
-What is the Actor supposed to do?
-"
 Class {
-	#name : #AMTActorBlueprint,
+	#name : #ATM,
 	#superclass : #Object,
 	#instVars : [
 		'mailbox',
@@ -15,29 +12,27 @@ Class {
 }
 
 { #category : #accessing }
-AMTActorBlueprint >> actorElement [
+ATM >> actorElement [
 	^ actorElement
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> actorElement: anObject [
+ATM >> actorElement: anObject [
 	actorElement := anObject
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> addToMailbox: message [
+ATM >> addToMailbox: message [
 	mailbox add: message.
 	self actorElement changeHeaderColor
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> createAndSend [
-	<AMTSend>
-	^ self
+ATM >> createAndSend [ <AMTSend> | bank | state := state - 200. knownActors do: [ :actor | actor class = Bank ifTrue: [ bank := actor ] ]. self createAndSendMessageTo: bank with: '200' and: 'Withdrawal'
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
+ATM >> createAndSendMessageTo: recipient with: data and: type [
 	<AMTSend>
 	| message |
 	message := AMTMessageBlueprint new.
@@ -49,7 +44,7 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> hasActor: anActor [
+ATM >> hasActor: anActor [
 	| occurrences |
 	occurrences := knownActors occurrencesOf: anActor.
 	occurrences > 0
@@ -58,7 +53,7 @@ AMTActorBlueprint >> hasActor: anActor [
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> initialize [
+ATM >> initialize [
 	mailbox := OrderedCollection new.
 	address := UUIDGenerator new nextRandom16.
 	state := 0.
@@ -66,17 +61,17 @@ AMTActorBlueprint >> initialize [
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors [
+ATM >> knownActors [
 	^ knownActors
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> knownActors: anObject [
+ATM >> knownActors: anObject [
 	knownActors := anObject
 ]
 
 { #category : #messaging }
-AMTActorBlueprint >> processsMessage [
+ATM >> processsMessage [
 	| message |
 	message := mailbox at: 1.
 	message type = 'Test'
@@ -84,19 +79,17 @@ AMTActorBlueprint >> processsMessage [
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> receive [
+ATM >> receive [
 	<AMTReceive>
 	self actorElement changeHeaderColorBack.
 	^ self
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> setUp [
-	<AMTSetup>
-	^ self
+ATM >> setUp [ state := 500.
 ]
 
 { #category : #accessing }
-AMTActorBlueprint >> state [
+ATM >> state [
 	^ state
 ]

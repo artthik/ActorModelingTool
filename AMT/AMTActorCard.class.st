@@ -19,7 +19,8 @@ Class {
 		'minimizeActorButton',
 		'maximizeActorCardButton',
 		'saveNameButton',
-		'commentElement'
+		'commentElement',
+		'actorCard'
 	],
 	#category : #'AMT-View'
 }
@@ -27,6 +28,16 @@ Class {
 { #category : #accessing }
 AMTActorCard >> actor [
 	^ actor
+]
+
+{ #category : #accessing }
+AMTActorCard >> actorElement [
+	^ actorCard
+]
+
+{ #category : #accessing }
+AMTActorCard >> actorElement: anObject [
+	actorCard := anObject
 ]
 
 { #category : #adding }
@@ -46,6 +57,16 @@ AMTActorCard >> addActorButton [
 		yourself
 ]
 
+{ #category : #accessing }
+AMTActorCard >> addActorButton1 [
+	^ addActorButton
+]
+
+{ #category : #accessing }
+AMTActorCard >> addActorButton: anObject [
+	addActorButton := anObject
+]
+
 { #category : #initialization }
 AMTActorCard >> attributesElement [
 	^ BrSimpleList new
@@ -61,6 +82,21 @@ AMTActorCard >> attributesElement [
 				label: n;
 				action: [ :b | b phlow spawnObject: (actor instVarNamed: n) ];
 				yourself ] yourself
+]
+
+{ #category : #accessing }
+AMTActorCard >> attributesElement1 [
+	^ attributesElement
+]
+
+{ #category : #accessing }
+AMTActorCard >> attributesElement: anObject [
+	attributesElement := anObject
+]
+
+{ #category : #accessing }
+AMTActorCard >> buttons [
+	^ buttons
 ]
 
 { #category : #accessing }
@@ -211,6 +247,16 @@ AMTActorCard >> methodElement [
 ]
 
 { #category : #accessing }
+AMTActorCard >> methodElement1 [
+	^ methodElement
+]
+
+{ #category : #accessing }
+AMTActorCard >> methodElement: anObject [
+	methodElement := anObject
+]
+
+{ #category : #accessing }
 AMTActorCard >> minimizeActorCard [
 	self
 		removeChild: nameElement;
@@ -252,6 +298,16 @@ AMTActorCard >> nameElement [
 ]
 
 { #category : #accessing }
+AMTActorCard >> nameElement1 [
+	^ nameElement
+]
+
+{ #category : #accessing }
+AMTActorCard >> nameElement: anObject [
+	nameElement := anObject
+]
+
+{ #category : #accessing }
 AMTActorCard >> receiveButton [
 	^ BrButton new
 		beLarge;
@@ -280,6 +336,11 @@ AMTActorCard >> refreshButton [
 ]
 
 { #category : #accessing }
+AMTActorCard >> refreshButton: anObject [
+	refreshButton := anObject
+]
+
+{ #category : #accessing }
 AMTActorCard >> saveNameButton [
 	^ BrButton new
 		beLarge;
@@ -296,7 +357,7 @@ AMTActorCard >> saveNameButton [
 AMTActorCard >> setActor: anActor [
 	| attributes |
 	actor := anActor.
-	anActor actorCard: self.
+	anActor actorElement: self.
 	commentElement text: actor class comment asRopedText.
 	nameElement text: actor class name asRopedText.
 	attributes := actor class allInstVarNames.
@@ -316,6 +377,11 @@ AMTActorCard >> setUpButton [
 		action: [ actor setUp ];
 			constraintsDo: [ :c | c horizontal matchParent ];
 		yourself
+]
+
+{ #category : #accessing }
+AMTActorCard >> view [
+	^ view
 ]
 
 { #category : #accessing }
