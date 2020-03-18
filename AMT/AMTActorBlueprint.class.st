@@ -9,7 +9,8 @@ Class {
 		'address',
 		'state',
 		'knownActors',
-		'actorElement'
+		'actorElement',
+		'messageHandlers'
 	],
 	#category : #'AMT-Model'
 }
@@ -46,6 +47,17 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 	message data: data.
 	message type: type.
 	recipient addToMailbox: message
+]
+
+{ #category : #initialization }
+AMTActorBlueprint >> executeMessages [
+	mailbox copy
+		do: [ :m | 
+			| matchingHandlers |
+			matchingHandlers := messageHandlers
+				select: [ :h | h appliesToMessage: m ].
+			matchingHandlers do: [ :handler | handler executeForMessage: m ].
+			mailbox remove: m ]
 ]
 
 { #category : #accessing }

@@ -1,3 +1,6 @@
+"
+I am the ATM, doing all the ATM stuff
+"
 Class {
 	#name : #ATM,
 	#superclass : #Object,
@@ -28,7 +31,15 @@ ATM >> addToMailbox: message [
 ]
 
 { #category : #initialization }
-ATM >> createAndSend [ <AMTSend> | bank | state := state - 200. knownActors do: [ :actor | actor class = Bank ifTrue: [ bank := actor ] ]. self createAndSendMessageTo: bank with: '200' and: 'Withdrawal'
+ATM >> createAndSend [
+	<AMTSend>
+	| bank |
+	state := state - 200.
+	knownActors
+		do: [ :actor | 
+			actor class = Bank
+				ifTrue: [ bank := actor ] ].
+	self createAndSendMessageTo: bank with: '200' and: 'Withdrawal'
 ]
 
 { #category : #messaging }
@@ -70,14 +81,6 @@ ATM >> knownActors: anObject [
 	knownActors := anObject
 ]
 
-{ #category : #messaging }
-ATM >> processsMessage [
-	| message |
-	message := mailbox at: 1.
-	message type = 'Test'
-		ifTrue: [ ^ message data ]
-]
-
 { #category : #initialization }
 ATM >> receive [
 	<AMTReceive>
@@ -92,4 +95,16 @@ ATM >> setUp [ state := 500.
 { #category : #accessing }
 ATM >> state [
 	^ state
+]
+
+{ #category : #initialization }
+ATM >> when: condition and: conditions2 do: statement [
+	condition & conditions2 
+		ifTrue: [ ^ statement value ]
+]
+
+{ #category : #initialization }
+ATM >> when: condition do: statement [
+	condition
+		ifTrue: [ ^ statement value ]
 ]

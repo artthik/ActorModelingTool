@@ -97,7 +97,7 @@ AMTActorElement >> attributesElement [
 			BrButton new
 				look: BrGlamorousButtonWithLabelLook;
 				label: n;
-				action: [ :b | b phlow spawnObject: (actor instVarNamed: n) ];
+				action: [ :b |  b phlow spawnObject: (actor instVarNamed: n)  ];
 				yourself ] yourself
 ]
 
