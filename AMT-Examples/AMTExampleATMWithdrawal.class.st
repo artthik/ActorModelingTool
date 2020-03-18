@@ -85,8 +85,10 @@ AMTExampleATMWithdrawal >> completeScenario [
 	"Rename actors"
 	bankActor := actors at: 1.
 	bankActor class rename: 'Bank'.
+	bankActor class comment: 'I am the Bank, doing Bank stuff'.
 	atmActor := actors at: 2.
 	atmActor class rename: 'ATM'.
+	atmActor class comment: 'I am the ATM, doing all the ATM stuff'.
 	"Add all the needed methods to all the classes"
 	atmActor class
 		compile:
@@ -97,11 +99,22 @@ AMTExampleATMWithdrawal >> completeScenario [
 	"Add the ATM method to create and send a message to the bank"
 	atmActor class
 		compile:
-			'createAndSend <AMTSend> | bank | state := state - 200. knownActors do: [ :actor | actor class = Bank ifTrue: [ bank := actor ] ]. self createAndSendMessageTo: bank with: ''200'' and: ''Withdrawal'''.
+			'createAndSend <AMTSend> 
+				| bank | 
+				state := state - 200. 
+				knownActors do: [ :actor | actor class = Bank 
+					ifTrue: [ bank := actor ] ]. 
+				self createAndSendMessageTo: bank with: ''200'' and: ''Withdrawal'''.
 	"Add the Bank method to receive and process the message from the ATM"
 	bankActor class
 		compile:
-			'receive <AMTReceive>	| message | message := mailbox at: 1. message type = ''Withdrawal'' ifTrue: [ state := state - message data asNumber]. self actorElement changeHeaderColorBack.'.
+			'receiveWithdrawal <AMTReceive>
+			|message|
+			message := mailbox at: 1.
+				 self when: (message type = ''Withdrawal'' )
+				and: (2=2)
+					  do: [ state := state - message data asNumber]. 
+				self receive'.
 	"Refresh the actors so the view shows the changes"
 	container := view container.
 	actorCards := container children.

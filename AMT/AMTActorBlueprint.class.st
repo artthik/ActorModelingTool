@@ -75,14 +75,6 @@ AMTActorBlueprint >> knownActors: anObject [
 	knownActors := anObject
 ]
 
-{ #category : #messaging }
-AMTActorBlueprint >> processsMessage [
-	| message |
-	message := mailbox at: 1.
-	message type = 'Test'
-		ifTrue: [ ^ message data ]
-]
-
 { #category : #initialization }
 AMTActorBlueprint >> receive [
 	<AMTReceive>
@@ -99,4 +91,16 @@ AMTActorBlueprint >> setUp [
 { #category : #accessing }
 AMTActorBlueprint >> state [
 	^ state
+]
+
+{ #category : #initialization }
+AMTActorBlueprint >> when: condition and: conditions2 do: statement [
+	condition & conditions2 
+		ifTrue: [ ^ statement value ]
+]
+
+{ #category : #initialization }
+AMTActorBlueprint >> when: condition do: statement [
+	condition
+		ifTrue: [ ^ statement value ]
 ]
