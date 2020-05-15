@@ -33,3 +33,9 @@ AMTController >> initialize [
 	view addActor.
 	^ view
 ]
+
+{ #category : #adding }
+AMTController >> linkActor: fromActor to: toActor [
+	fromActor linkActor: toActor.
+	toActor linkActor: fromActor
+]

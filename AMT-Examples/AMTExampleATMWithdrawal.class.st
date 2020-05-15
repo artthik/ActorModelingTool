@@ -89,13 +89,11 @@ AMTExampleATMWithdrawal >> completeScenario [
 	atmActor := actors at: 2.
 	atmActor class rename: 'ATM'.
 	atmActor class comment: 'I am the ATM, doing all the ATM stuff'.
+	bankActor actorElement linkActor: atmActor actorElement.
+	atmActor actorElement linkActor: bankActor actorElement.
 	"Add all the needed methods to all the classes"
-	atmActor class
-		compile:
-			'setUp state := 500.'.
-	bankActor class
-		compile:
-			'setUp state := 5000.'.
+	atmActor class compile: 'setUp state := 500.'.
+	bankActor class compile: 'setUp state := 5000.'.
 	"Add the ATM method to create and send a message to the bank"
 	atmActor class
 		compile:
@@ -112,7 +110,6 @@ AMTExampleATMWithdrawal >> completeScenario [
 			|message|
 			message := mailbox at: 1.
 				 self when: (message type = ''Withdrawal'' )
-				and: (2=2)
 					  do: [ state := state - message data asNumber]. 
 				self receive'.
 	"Refresh the actors so the view shows the changes"

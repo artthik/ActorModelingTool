@@ -21,7 +21,9 @@ Class {
 		'addActorButton',
 		'receiveMethodsList',
 		'sendMethodsList',
-		'allMethodsList'
+		'allMethodsList',
+		'linkActorButton',
+		'selectedActor'
 	],
 	#category : #'AMT-View'
 }
@@ -168,7 +170,8 @@ AMTActorElement >> initialize [
 	nameLabel := self nameLabel.
 	saveNameButton := self saveNameButton.
 	refreshButton := self refreshButton.
-	addActorButton := self addActorButton .
+	addActorButton := self addActorButton.
+	linkActorButton := self linkActorButton.
 	tabGroup := self tabGroup.
 	buttons := BlElement new.
 	buttons layout: BlLinearLayout horizontal.
@@ -179,12 +182,40 @@ AMTActorElement >> initialize [
 	buttons
 		addChild: saveNameButton;
 		addChild: refreshButton;
-		addChild: addActorButton.
+		addChild: addActorButton;
+		addChild: linkActorButton.
 	self
 		addChild: nameLabel;
 		addChild: buttons;
 		addChild: tabGroup.
 	^ self
+]
+
+{ #category : #accessing }
+AMTActorElement >> linkActor: anActorElement [
+	| actorToLink |
+	actorToLink := anActorElement.
+	view selectedActor ~= 0
+		ifTrue: [ | anEdge |
+			anEdge := view drawEdgeFrom: view selectedActor to: anActorElement.
+			view selectedActor background: Color white.
+			view selectedActor: 0 ]
+		ifFalse: [ view selectedActor: actorToLink.
+			anActorElement background: Color blue.
+			view selectedActor: anActorElement ]
+]
+
+{ #category : #accessing }
+AMTActorElement >> linkActorButton [
+	^ BrButton new
+		beLarge;
+		look: BrGlamorousButtonWithIconLook new;
+		icon: BrGlamorousIcons add asElement;
+		label: 'Link Actor';
+		action: [ self linkActor: self ];
+		constraintsDo: [ :c | c horizontal matchParent ];
+		margin: (BlInsets top: 5 right: 5);
+		yourself
 ]
 
 { #category : #initialization }
@@ -320,7 +351,6 @@ AMTActorElement >> tabGroup [
 	^ BrTabGroup new
 		look: BrGlamorousTabGroupLook new;
 		addTab: self mainTab;
-		addTab: self behaviourTab;
 		addTab: self sendTab;
 		addTab: self receiveTab;
 		addTab: self allMethodsTab

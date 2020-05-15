@@ -14,9 +14,6 @@ Class {
 AMTModel >> addActor: anActor [
 	| tmpActors |
 	actors add: anActor.
-	tmpActors := actors.
-	tmpActors do: [ :actor | actor knownActors: actors ].
-	actors := tmpActors
 ]
 
 { #category : #initialization }

@@ -26,6 +26,11 @@ AMTActorBlueprint >> actorElement: anObject [
 ]
 
 { #category : #accessing }
+AMTActorBlueprint >> addToKnownActors: anActor [
+	self knownActors add: anActor
+]
+
+{ #category : #accessing }
 AMTActorBlueprint >> addToMailbox: message [
 	mailbox add: message.
 	self actorElement changeHeaderColor
@@ -84,7 +89,7 @@ AMTActorBlueprint >> knownActors [
 
 { #category : #accessing }
 AMTActorBlueprint >> knownActors: anObject [
-	knownActors := anObject
+	knownActors := anObject.
 ]
 
 { #category : #initialization }
