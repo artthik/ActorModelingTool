@@ -1,31 +1,8 @@
 Class {
 	#name : #VostraChecker2,
-	#superclass : #Object,
-	#instVars : [
-		'mailbox',
-		'address',
-		'state',
-		'knownActors',
-		'actorElement'
-	],
+	#superclass : #AMTAbstractActor,
 	#category : #'AMT-Model'
 }
-
-{ #category : #accessing }
-VostraChecker2 >> actorElement [
-	^ actorElement
-]
-
-{ #category : #accessing }
-VostraChecker2 >> actorElement: anObject [
-	actorElement := anObject
-]
-
-{ #category : #accessing }
-VostraChecker2 >> addToMailbox: message [
-	mailbox add: message.
-	self actorElement changeHeaderColor
-]
 
 { #category : #initialization }
 VostraChecker2 >> createAndSend [
@@ -43,41 +20,6 @@ VostraChecker2 >> createAndSendMessageTo: recipient with: data and: type [
 	message data: data.
 	message type: type.
 	recipient addToMailbox: message
-]
-
-{ #category : #accessing }
-VostraChecker2 >> hasActor: anActor [
-	| occurrences |
-	occurrences := knownActors occurrencesOf: anActor.
-	occurrences > 0
-		ifTrue: [ ^ true ]
-		ifFalse: [ ^ false ]
-]
-
-{ #category : #messaging }
-VostraChecker2 >> initialize [
-	mailbox := OrderedCollection new.
-	address := UUIDGenerator new nextRandom16.
-	state := 0.
-	knownActors := OrderedCollection new.
-]
-
-{ #category : #accessing }
-VostraChecker2 >> knownActors [
-	^ knownActors
-]
-
-{ #category : #accessing }
-VostraChecker2 >> knownActors: anObject [
-	knownActors := anObject
-]
-
-{ #category : #messaging }
-VostraChecker2 >> processsMessage [
-	| message |
-	message := mailbox at: 1.
-	message type = 'Test'
-		ifTrue: [ ^ message data ]
 ]
 
 { #category : #initialization }
@@ -124,9 +66,4 @@ self actorElement changeHeaderColorBack.
 VostraChecker2 >> setUp [
 	<AMTSetup>
 	^ self
-]
-
-{ #category : #accessing }
-VostraChecker2 >> state [
-	^ state
 ]
