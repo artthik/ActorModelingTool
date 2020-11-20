@@ -3,38 +3,9 @@ What is the Actor supposed to do?
 "
 Class {
 	#name : #AMTActorBlueprint,
-	#superclass : #Object,
-	#instVars : [
-		'mailbox',
-		'address',
-		'state',
-		'knownActors',
-		'actorElement',
-		'messageHandlers'
-	],
+	#superclass : #AMTAbstractActor,
 	#category : #'AMT-Model'
 }
-
-{ #category : #accessing }
-AMTActorBlueprint >> actorElement [
-	^ actorElement
-]
-
-{ #category : #accessing }
-AMTActorBlueprint >> actorElement: anObject [
-	actorElement := anObject
-]
-
-{ #category : #accessing }
-AMTActorBlueprint >> addToKnownActors: anActor [
-	self knownActors add: anActor
-]
-
-{ #category : #accessing }
-AMTActorBlueprint >> addToMailbox: message [
-	mailbox add: message.
-	self actorElement changeHeaderColor
-]
 
 { #category : #initialization }
 AMTActorBlueprint >> createAndSend [
@@ -55,44 +26,6 @@ AMTActorBlueprint >> createAndSendMessageTo: recipient with: data and: type [
 ]
 
 { #category : #initialization }
-AMTActorBlueprint >> executeMessages [
-	mailbox copy
-		do: [ :m | 
-			| matchingHandlers |
-			matchingHandlers := messageHandlers
-				select: [ :h | h appliesToMessage: m ].
-			matchingHandlers do: [ :handler | handler executeForMessage: m ].
-			mailbox remove: m ]
-]
-
-{ #category : #accessing }
-AMTActorBlueprint >> hasActor: anActor [
-	| occurrences |
-	occurrences := knownActors occurrencesOf: anActor.
-	occurrences > 0
-		ifTrue: [ ^ true ]
-		ifFalse: [ ^ false ]
-]
-
-{ #category : #messaging }
-AMTActorBlueprint >> initialize [
-	mailbox := OrderedCollection new.
-	address := UUIDGenerator new nextRandom16.
-	state := 0.
-	knownActors := OrderedCollection new.
-]
-
-{ #category : #accessing }
-AMTActorBlueprint >> knownActors [
-	^ knownActors
-]
-
-{ #category : #accessing }
-AMTActorBlueprint >> knownActors: anObject [
-	knownActors := anObject.
-]
-
-{ #category : #initialization }
 AMTActorBlueprint >> receive [
 	<AMTReceive>
 	self actorElement changeHeaderColorBack.
@@ -103,21 +36,4 @@ AMTActorBlueprint >> receive [
 AMTActorBlueprint >> setUp [
 	<AMTSetup>
 	^ self
-]
-
-{ #category : #accessing }
-AMTActorBlueprint >> state [
-	^ state
-]
-
-{ #category : #initialization }
-AMTActorBlueprint >> when: condition and: conditions2 do: statement [
-	condition & conditions2 
-		ifTrue: [ ^ statement value ]
-]
-
-{ #category : #initialization }
-AMTActorBlueprint >> when: condition do: statement [
-	condition
-		ifTrue: [ ^ statement value ]
 ]
