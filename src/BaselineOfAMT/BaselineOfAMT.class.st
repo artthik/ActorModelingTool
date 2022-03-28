@@ -1,18 +1,10 @@
-"
-Adding this class allows the project to be loaded by executing this snippet:
-
-	Metacello new
-		baseline: 'AMT';
-		repository: 'github://artthik/ActorModelingTool';
-		load
-"
 Class {
 	#name : #BaselineOfAMT,
 	#superclass : #BaselineOf,
 	#category : #BaselineOfAMT
 }
 
-{ #category : #BaselineOfAMT }
+{ #category : #baselines }
 BaselineOfAMT >> baseline: spec [
 	<baseline>
 	spec
