@@ -8,7 +8,7 @@ Adding this class allows the project to be loaded by executing this snippet:
 "
 Class {
 	#name : #BaselineOfAMT,
-	#superclass : #Object,
+	#superclass : #BaselineOf,
 	#category : #BaselineOfAMT
 }
 
