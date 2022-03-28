@@ -3,7 +3,7 @@ Adding this class allows the project to be loaded by executing this snippet:
 
 	Metacello new
 		baseline: 'AMT';
-		repository: 'https://github.com/artthik/ActorModelingTool';
+		repository: 'github://artthik/ActorModelingTool';
 		load
 "
 Class {
@@ -12,12 +12,12 @@ Class {
 	#category : #BaselineOfAMT
 }
 
-{ #category : #baselines }
+{ #category : #BaselineOfAMT }
 BaselineOfAMT >> baseline: spec [
 	<baseline>
 	spec
 		for: #common
 		do: [ spec
-				package: #AMT;
+				package: #'AMT';
 				package: #'AMT-Examples' ]
 ]
