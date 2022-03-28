@@ -9,9 +9,9 @@ Open a **Playground** and execute the following script.
 
 ``` 
 Metacello new
-		baseline: 'AMT';
-		repository: 'https://github.com/artthik/ActorModelingTool';
-		load
+	baseline: 'AMT';
+	repository: 'github://artthik/ActorModelingTool';
+	load
 ```
 
 ### Step 2
