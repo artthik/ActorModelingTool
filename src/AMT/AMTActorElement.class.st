@@ -118,14 +118,6 @@ AMTActorElement >> attributesLabel [
 		  yourself
 ]
 
-{ #category : #initialization }
-AMTActorElement >> behaviourTab [
-	^ BrTab new
-		look: BrGlamorousTabAptitude new;
-		label: 'Behaviour';
-		stencil: [ AMTActorCard new setActor: actor ]
-]
-
 { #category : #accessing }
 AMTActorElement >> changeHeaderColor [
 	nameLabel background: (Color fromHexString: 'FF928B')
