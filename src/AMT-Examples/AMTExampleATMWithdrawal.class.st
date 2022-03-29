@@ -75,8 +75,10 @@ AMTExampleATMWithdrawal >> completeScenario [
 	"Delete older instances of Bank and ATM"
 
 	<gtExample>
-	Smalltalk globals removeClassNamed: 'Bank'.
-	Smalltalk globals removeClassNamed: 'ATM'.
+	Smalltalk removeClassNamed: 'Bank'.
+	Smalltalk removeClassNamed: 'ATM'.
+	Undeclared removeKey: #Bank.
+	Undeclared removeKey: #ATM.
 	"Create new AMT project with initial actor"
 	view := AMTController new.
 	"Add another actor"

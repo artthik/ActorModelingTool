@@ -250,6 +250,11 @@ AMTVostraExample >> cleanUp [
 	Smalltalk globals removeClassNamed: 'VostraChecker2'.
 	Smalltalk globals removeClassNamed: 'VostraChecker3'.
 	Smalltalk globals removeClassNamed: 'VostraEnd'.
+	Undeclared removeKey: #VostraStart.
+	Undeclared removeKey: #VostraChecker1.
+	Undeclared removeKey: #VostraChecker2.
+	Undeclared removeKey: #VostraChecker3.
+	Undeclared removeKey: #VostraEnd.
 ]
 
 { #category : #'accessing structure variables' }
