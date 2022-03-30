@@ -101,7 +101,6 @@ AMTView >> selectedActor [
 { #category : #accessing }
 AMTView >> selectedActor: anObject [
 	selectedActor := anObject.
-	self inform: 'add'.
 ]
 
 { #category : #initialization }
