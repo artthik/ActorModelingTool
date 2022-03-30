@@ -67,6 +67,7 @@ AMTActorElement >> addActorButton [
 
 { #category : #initialization }
 AMTActorElement >> allMethodsList [
+	|coder|
 	^ BrSimpleList new
 		padding: (BlInsets all: 5);
 		hMatchParent;
@@ -75,7 +76,6 @@ AMTActorElement >> allMethodsList [
 		stencil:
 			[ :m | 
 			(GtPharoMethodCoder forMethod: m)
-				object: actor;
 				yourself ] yourself
 ]
 
@@ -265,7 +265,6 @@ AMTActorElement >> receiveMethodsList [
 		stencil:
 			[ :m | 
 			(GtPharoMethodCoder forMethod: m)
-				object: actor;
 				yourself ] yourself
 ]
 
@@ -336,7 +335,6 @@ AMTActorElement >> sendMethodsList [
 		stencil:
 			[ :m | 
 			(GtPharoMethodCoder forMethod: m)
-				object: actor;
 				yourself ] yourself
 ]
 
